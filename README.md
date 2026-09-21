@@ -32,23 +32,23 @@
    Ввод:
    Вывод: Error: Numeric operand expected
 2. Символ алфавита
-   Ввод: a l
+   Ввод: a =
    Вывод: Error: Numeric operand expected
 3. Спецсимвол
-   Ввод: ; l
+   Ввод: ; =
    Вывод: Error: Numeric operand expected
 4. Символ алфавита и число
-   Ввод: a4 l
+   Ввод: a4 =
    Вывод: Error: Numeric operand expected
 5. Число и символ алфавита
-   Ввод: 4a l
+   Ввод: 4a =
    Вывод: Error: Numeric operand expected
 6. Спецсимвол и число
-   Ввод: ;4 l
+   Ввод: ;4 =
    Вывод: Error: Numeric operand expected
 7. Число и спецсимвол
-   Ввод: 4; l
+   Ввод: 4; =
    Вывод: Error: Numeric operand expected
 8. Слово
-   Ввод: четыре l
+   Ввод: четыре =
    Вывод: Error: Numeric operand expected
