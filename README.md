@@ -1,6 +1,6 @@
 # Функции калькулятора:
 - [ ] ReadNumber
-  - [ ] Тесты
+  - [x] Тесты
   - [ ] Код
 - [ ] RunCalculatorCycle
 - [ ] s
