@@ -4,8 +4,12 @@
 
 bool CheckIsNumber(const std::string& str) {
 	bool is_number = true;
-	for (char sym : str) {
-		if (!std::isdigit(sym) && (sym != '-')) {
+	if (str.front() != '+' && str.front() != '-' && !std::isdigit(str.front())) {
+		return false;
+	}
+
+	for (size_t i = 1; i < str.size(); ++i) {
+		if (!std::isdigit(str[i])) {
 			is_number = false;
 			break;
 		}
