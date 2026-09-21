@@ -55,7 +55,7 @@
    Вывод: Error: Numeric operand expected
 9. Минус после числа (после минуса должно быть число)  
    Ввод: 14- =  
-   Вывод: Error: Numeric operand expecte
+   Вывод: Error: Numeric operand expected  
 10. Плюс после числа (после плюса должно быть число)  
     Ввод: 14+ =  
     Вывод: Error: Numeric operand expected
