@@ -1,5 +1,5 @@
 # Функции калькулятора:
-- [ ] ReadNumber
+- [x] ReadNumber
 - [ ] RunCalculatorCycle
 - [ ] s
 - [ ] l
