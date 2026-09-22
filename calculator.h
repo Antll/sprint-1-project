@@ -17,3 +17,5 @@ bool LoadCell(Number& cell, bool is_safed, Number& dist);
 void SaveCell(Number& cell, Number value, bool& is_safed);
 			
 bool Sum(Number& value);
+			
+bool Substract(Number& value);

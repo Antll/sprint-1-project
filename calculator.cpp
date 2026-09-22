@@ -50,6 +50,8 @@ bool RunCalculatorCycle() {
 			SaveCell(cell, value, is_safed);	
 		} else if (op == "+") {
 			is_exit = Sum(value);			
+		} else if (op == "-") {
+			is_exit = Substract(value);	
 		} else if (op == "=") {
 			std::cout << value << std::endl;	
 		} else if (op == "q") {
@@ -87,6 +89,17 @@ bool Sum(Number& value) {
 	
 	if (!is_failed) {
 		value += operand;	
+	}
+
+	return is_failed;
+}
+
+bool Substract(Number& value) {
+	Number operand = 0;
+	bool is_failed = !ReadNumber(operand);
+
+	if (!is_failed) {
+		value -= operand;
 	}
 
 	return is_failed;
