@@ -48,6 +48,8 @@ bool RunCalculatorCycle() {
 			is_exit = LoadCell(cell, is_safed, value);
 		} else if (op == "s") {
 			SaveCell(cell, value, is_safed);	
+		} else if (op == "+") {
+			is_exit = Sum(value);			
 		} else if (op == "=") {
 			std::cout << value << std::endl;	
 		} else if (op == "q") {
@@ -77,4 +79,15 @@ bool LoadCell(Number& cell, bool is_safed, Number& dist) {
 void SaveCell(Number& cell, Number value, bool& is_safed) {
 	is_safed = true;
 	cell = value;
+}
+
+bool Sum(Number& value) {
+	Number operand = 0;
+	bool is_failed = !ReadNumber(operand);
+	
+	if (!is_failed) {
+		value += operand;	
+	}
+
+	return is_failed;
 }
