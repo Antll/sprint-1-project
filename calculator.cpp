@@ -46,8 +46,12 @@ bool RunCalculatorCycle() {
 		std::cin >> op;
 		if (op == "l") {
 			is_exit = LoadCell(cell, is_safed, value);
+		} else if (op == "s") {
+			SaveCell(cell, value, is_safed);	
 		} else if (op == "=") {
 			std::cout << value << std::endl;	
+		} else if (op == "q") {
+			is_exit = true;	
 		} else {
 			std::cerr << "Error: Unknown token "
 				  << op << std::endl;
@@ -68,4 +72,9 @@ bool LoadCell(Number& cell, bool is_safed, Number& dist) {
 	}
 
 	return is_failed;
+}
+
+void SaveCell(Number& cell, Number value, bool& is_safed) {
+	is_safed = true;
+	cell = value;
 }

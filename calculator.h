@@ -13,3 +13,5 @@ bool ReadNumber(Number& result);
 bool RunCalculatorCycle();
 			
 bool LoadCell(Number& cell, bool is_safed, Number& dist);
+			
+void SaveCell(Number& cell, Number value, bool& is_safed);
