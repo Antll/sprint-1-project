@@ -17,47 +17,47 @@
 ## ReadNumber
 ### Число
 1. Положительное  
-   Ввод: 8 =  
+   Ввод: 8 = q  
    Вывод: 8
 2. Ноль  
-   Ввод: 0 =  
+   Ввод: 0 = q  
    Вывод: 0
 3. Отрицательное  
-   Ввод: -8 =  
+   Ввод: -8 = q  
    Вывод: -8
 4. Плюс перед числом  
-   Ввод: +8 =  
+   Ввод: +8 = q  
    Вывод: 8
 ### Не число
 1. Пустая строка  (два пробела и знак =)  
-   Ввод:  =   
+   Ввод:  = q  
    Вывод: Error: Numeric operand expected
 2. Символ алфавита  
-   Ввод: a =  
+   Ввод: a = q  
    Вывод: Error: Numeric operand expected
 3. Спецсимвол  
-   Ввод: ; =  
+   Ввод: ; = q  
    Вывод: Error: Numeric operand expected
 4. Символ алфавита и число  
-   Ввод: a4 =  
+   Ввод: a4 = q  
    Вывод: Error: Numeric operand expected
 5. Число и символ алфавита  
-   Ввод: 4a =  
+   Ввод: 4a = q  
    Вывод: Error: Numeric operand expected
 6. Спецсимвол и число  
-   Ввод: ;4 =  
+   Ввод: ;4 = q  
    Вывод: Error: Numeric operand expected
 7. Число и спецсимвол  
-   Ввод: 4; =  
+   Ввод: 4; = q  
    Вывод: Error: Numeric operand expected
 8. Слово  
-   Ввод: четыре =  
+   Ввод: четыре = q  
    Вывод: Error: Numeric operand expected
 9. Минус после числа (после минуса должно быть число)  
-   Ввод: 14- =  
+   Ввод: 14- = q  
    Вывод: Error: Numeric operand expected  
 10. Плюс после числа (после плюса должно быть число)  
-    Ввод: 14+ =  
+    Ввод: 14+ = q  
     Вывод: Error: Numeric operand expected
     
 ## s  
@@ -74,6 +74,6 @@
 
 ## l
 1. Вывод пустой ячейки  
-   Ввод: 4 l  
+   Ввод: 4 l q  
    Вывод: Error: Memory is empty  
     
