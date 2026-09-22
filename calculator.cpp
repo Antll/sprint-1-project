@@ -37,7 +37,35 @@ bool RunCalculatorCycle() {
 	if (!ReadNumber(value)) {
 		return false;
 	}
-	std::cout << value << std::endl;
+
+	std::string op;
+	Number cell = 0;
+	bool is_safed = false;
+	bool is_exit = false;
+	while (!is_exit) {
+		std::cin >> op;
+		if (op == "l") {
+			is_exit = LoadCell(cell, is_safed, value);
+		} else if (op == "=") {
+			std::cout << value << std::endl;	
+		} else {
+			std::cerr << "Error: Unknown token "
+				  << op << std::endl;
+			is_exit = true;
+		}
+	}
 
 	return true;
+}
+			
+bool LoadCell(Number& cell, bool is_safed, Number& dist) {
+	bool is_failed = false;
+	if (is_safed) {
+		dist = cell;
+	} else {
+		std::cerr << "Error: Memory is empty" << std::endl;
+		is_failed = true;
+	}
+
+	return is_failed;
 }

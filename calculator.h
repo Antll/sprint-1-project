@@ -11,3 +11,5 @@ inline double ConvertToNumber(const std::string& line) {
 bool ReadNumber(Number& result);
 
 bool RunCalculatorCycle();
+			
+bool LoadCell(Number& cell, bool is_safed, Number& dist);
