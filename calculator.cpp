@@ -106,30 +106,9 @@ bool ParseTokens(std::vector<Number>& values,
 	bool is_failed = false;
 
 	std::string op;
-	Number operand = 0; // TO DELETE
 	bool is_exit = false;
 	while (!is_exit) {
-		std::cin >> op;
-		/* TO DELETE
-		if (op == "l") {
-			operations.push_back("l");
-		} else if (op == "s") {
-			operations.push_back("s");
-		} else if (op == "+") {
-			operations.push_back("+");
-			is_exit = !ReadNumber(operand);
-			values.push_back(operand);
-		} else if (op == "-") {
-			operations.push_back("-");
-			is_exit = !ReadNumber(operand);
-			values.push_back(operand);
-		} else if (op == "*") {
-			operations.push_back("*");	
-			is_exit = !ReadNumber(operand);
-			values.push_back(operand);
-		} else if (op == "=") {
-			operations.push_back("=");
-		} else */ 
+		std::cin >> op;	
 		if (op == "q") {
 			is_exit = true;	
 		} else if (ParseOperationToken(values, operations, op)) {
@@ -177,24 +156,3 @@ void SaveCell(Number& cell, Number value, bool& is_safed) {
 	cell = value;
 }
 
-bool Sum(Number& value) {
-	Number operand = 0;
-	bool is_failed = !ReadNumber(operand);
-	
-	if (!is_failed) {
-		value += operand;	
-	}
-
-	return is_failed;
-}
-
-bool Substract(Number& value) {
-	Number operand = 0;
-	bool is_failed = !ReadNumber(operand);
-
-	if (!is_failed) {
-		value -= operand;
-	}
-
-	return is_failed;
-}
