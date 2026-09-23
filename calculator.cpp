@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 bool CheckIsNumber(const std::string& str) {
 	bool is_number = true;
@@ -48,6 +49,21 @@ bool ProcessLastOperations(std::vector<Number>& values,
 		}
 	}
 	return false;
+}
+
+bool ProcessPrePreLastOperations(std::vector<Number>& values,
+		                 std::vector<std::string>& operations) {
+	bool is_fail = false;
+	for (size_t i = 0, j = 1; i < operations.size() && !is_fail; ++i) {
+		if (operations[i] == "**") {
+			values[j - 1] = std::pow(values[j - 1], values[j]);	
+			++j;
+		} else {
+			++j; // Skip
+		}
+	}
+
+	return is_fail;
 }
 
 bool ProcessPreLastOperations(std::vector<Number>& values,
@@ -106,6 +122,10 @@ bool ParseOperationToken(std::vector<Number>& values,
 		operations.push_back("/");	
 		is_failed = !ReadNumber(operand);
 		values.push_back(operand);
+	} else if (op == "**") {
+		operations.push_back("**");	
+		is_failed = !ReadNumber(operand);
+		values.push_back(operand);
 	} else if (op == "=") {
 		operations.push_back("=");
 	} else {
@@ -145,7 +165,8 @@ bool RunCalculatorCycle() {
 	std::vector<Number> values = {value};
 
 	bool is_failed = !ReadNumber(values.back())
-                        ||  ParseTokens(values, operations)
+                        || ParseTokens(values, operations)
+			|| ProcessPrePreLastOperations(values, operations)
 	                || ProcessPreLastOperations(values,operations, 
 					                  cell, is_safed)
 	                || ProcessLastOperations(values, operations);
