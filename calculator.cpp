@@ -67,6 +67,14 @@ bool ProcessPreLastOperations(std::vector<Number>& values,
 		} else if (operations[i] == "*") {
 			values[j - 1] *= values[j];	
 			values.erase(values.begin() + j);
+		} else if (operations[i] == "/") {
+			if (values[j] == 0) {
+				std::cerr << "Division by zero" << std::endl;
+				is_fail = true;	
+			} else {
+				values[j - 1] /= values[j];
+				values.erase(values.begin() + j);
+			}
 		}
 	}
 
@@ -94,8 +102,14 @@ bool ParseOperationToken(std::vector<Number>& values,
 		operations.push_back("*");	
 		is_failed = !ReadNumber(operand);
 		values.push_back(operand);
+	} else if (op == "/") {
+		operations.push_back("/");	
+		is_failed = !ReadNumber(operand);
+		values.push_back(operand);
 	} else if (op == "=") {
 		operations.push_back("=");
+	} else {
+		is_failed = true;
 	}
 
 	return is_failed;
