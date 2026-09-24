@@ -47,7 +47,7 @@ bool NotLowerPriority(const std::string& op1,
 		is_op1_ge = true;	
 	} else if (op1 == "*" || op1 == "/") {
 		if (op2 == "+" || op2 == "-" || op2 == "*" || op2 == "/"
-		   || op2 == "l" || op2 == "s" || op2 == "=") {
+		   || op2 == "l" || op2 == "s" || op2 == "=" || op2 == ":") {
 			is_op1_ge = true;	
 		} 
 	} else if (op1 == "+" || op1 == "-") {
@@ -253,6 +253,10 @@ bool ParseOperationToken(std::vector<Number>& values,
 		values.push_back(operand);
 	} else if (op == "**") {
 		operations.push_back("**");	
+		is_failed = !ReadNumber(operand);
+		values.push_back(operand);
+	} else if (op == ":") {
+		operations.push_back(":");
 		is_failed = !ReadNumber(operand);
 		values.push_back(operand);
 	} else if (op == "=") {
