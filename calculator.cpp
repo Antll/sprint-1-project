@@ -97,6 +97,196 @@ bool ProcessPreLastOperations(std::vector<Number>& values,
 	return is_fail;
 }
 
+// True if op1 >= op2
+bool NotLowerPriority(const std::string& op1,
+		      const std::string& op2) {
+	bool is_op1_ge = false; // greate or equal
+	if (op1 == "**") {
+		is_op1_ge = true;	
+	} else if (op1 == "*" || op1 == "/") {
+		if (op2 == "+" || op2 == "-" || op2 == "*" || op2 == "/"
+		   || op2 == "l" || op2 == "s" || op2 == "=") {
+			is_op1_ge = true;	
+		} 
+	} else if (op1 == "+" || op1 == "-") {
+		if (op2 == "+" || op2 == "-" || op2 == "=" || op2 == ":"
+		    || op2 == "s" || op2 == "l") {
+			is_op1_ge = true;	
+		}	
+	} else if (op1 == "=" || op1 == ":" || op1 == "s" || op1 == "l") {
+		is_op1_ge = true;	
+	}
+
+	return is_op1_ge;
+}
+
+bool CheckIfAdditiveOperation(const std::string& op) {
+	return ((op == "+") || (op == "-")) ? true : false;
+}
+
+bool CheckIfCummulativeOperation(const std::string& op) {
+	return ((op == "*") || (op == "/") || (op == "**")) ? true : false;
+}
+
+bool CheckIfAccumulatorOperation(const std::string& op) {
+	return ((op == "=") || (op == ":")) ? true : false;
+}
+
+bool CheckIfCellOperatoin(const std::string& op) {
+	return ((op == "s") || (op == "l")) ? true : false;
+}
+
+bool EvaluateAdditiveOperation(const std::string& op, 
+		               Number& left, Number& right) {
+	bool is_fail = false;
+	if (op == "+") {
+		left += right;	
+	} else if (op == "-") {
+		left -= right;	
+	} else {
+		is_fail = false;
+	}
+
+	return is_fail;
+}
+
+bool EvaluateCummulativeOperation(const std::string& op,
+		                  Number& left, Number& right) {
+	bool is_fail = false;
+	if (op == "*") {
+		left *= right;	
+	} else if (op == "/") {
+		left /= right;	
+	} else if (op == "**") {
+		left = std::pow(left, right);	
+	} else {
+		is_fail = true;
+	}
+
+	return is_fail;
+}
+
+bool EvaluateAccumulatorOperation(const std::string& op,
+	  	                  Number left) {
+	bool is_fail = false;
+	if (op == "=") {
+		std::cout << left << std::endl;	
+	} else {
+		is_fail = true;	
+	}
+
+	return is_fail;
+}
+
+bool EvaluateAccumulatorOperation(const std::string& op,
+	  	                  Number& left, Number right) {
+	bool is_fail = false;
+	if (op == ":") {
+		left = right;	
+	} else {
+		is_fail = true;
+	}
+
+	return is_fail;
+}
+
+bool EvaluateCellOperatoin(const std::string& op, 
+		           Number& cell, Number& value, 
+			   Number& cell_dist, bool& is_safed) {
+	bool is_fail = false;
+	if (op == "s") {
+		SaveCell(cell, value, is_safed);	
+	} else if (op == "l") {
+		LoadCell(cell, is_safed, cell_dist);	
+	} else {
+		is_fail = true;
+	}
+
+	return is_fail;
+}
+
+bool EvaluateOperation(const std::string& op, Number& left, Number& right,
+		       Number& cell, Number& cell_dist, bool& is_safed) {
+	bool is_fail = false;
+	if ((op == "+") || (op == "-")) {
+		is_fail = EvaluateAdditiveOperation(op, left, right);	
+	} else if ((op == "*") || (op == "/") || (op == "**")) {
+		is_fail = EvaluateCummulativeOperation(op, left, right);	
+	} else if (op == ":") {
+		is_fail = EvaluateAccumulatorOperation(op, left, right);	
+	} else if (op == "=") {
+		is_fail = EvaluateAccumulatorOperation(op, left);	
+	} else if (op == "s" || op == "l") {
+		is_fail = EvaluateCellOperatoin(op, cell, left, 
+				                cell_dist, is_safed);	
+	} else {
+		is_fail = true;
+	}
+
+	return is_fail;
+}
+
+bool EraseUsedOperand(std::vector<Number>& values,
+		      const std::string& op, size_t pos) {
+	bool is_fail = false;
+	if (values.empty() || pos > values.size() - 1) {
+		return true;	
+	}
+
+	if (CheckIfAdditiveOperation(op) || CheckIfCummulativeOperation(op)
+	    || op == ":") {
+		values.erase(values.begin() + pos);	
+	}
+
+	return is_fail;
+}
+
+bool EraseEvaluatedOperation(std::vector<std::string>& operations, 
+		             size_t pos) {
+	bool is_fail = false;
+	if (operations.empty() || pos > operations.size() - 1) {
+		return true;	
+	}
+
+	operations.erase(operations.begin() + pos);
+
+	return is_fail;
+}
+
+// TODO: rewrite operation processing
+bool ProcessOperations(std::vector<Number>& values,
+		       std::vector<std::string>& operations,
+		       Number& cell,
+		       bool& is_safed) {
+	bool is_failed = false;
+	int i = 0; // operations
+	int j = (values.size() > 1) ? 1 : 0; // values
+	while (!operations.empty() && !is_failed) {
+		if (NotLowerPriority(operations[i], operations[i + 1])) {
+			Number& left = values.size() > 1 ? values[j - 1]
+				                         : values[j];
+			is_failed = EvaluateOperation(operations[i], 
+			         	              left, 
+					              values[j], cell, 
+						      left, 
+						      is_safed)	
+			           || EraseUsedOperand(values, 
+				   	               operations[i], j)
+			           || EraseEvaluatedOperation(operations, i);
+			i = 0;
+			j = (values.size() > 1) ? 1 : 0;
+		} else {
+			++i;
+			++j;
+		}
+	}
+/*
+	is_failed = EvaluateOperation(operations.front(), values[0], values[1],
+			              cell, values[j - 1], is_safed);
+*/
+	return is_failed;
+}
+
 bool ParseOperationToken(std::vector<Number>& values,
 		         std::vector<std::string>& operations,
 			 const std::string& op) {
@@ -166,10 +356,15 @@ bool RunCalculatorCycle() {
 
 	bool is_failed = !ReadNumber(values.back())
                         || ParseTokens(values, operations)
+			|| ProcessOperations(values, operations,
+					     cell, is_safed);
+
+			/* TO DELETE
 			|| ProcessPrePreLastOperations(values, operations)
 	                || ProcessPreLastOperations(values,operations, 
 					                  cell, is_safed)
 	                || ProcessLastOperations(values, operations);
+			*/
 
 	return is_failed;
 }
