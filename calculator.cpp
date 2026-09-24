@@ -11,6 +11,10 @@ bool CheckIsNumber(const std::string& str) {
 		return false;
 	}
 
+	if ((str.front() == '+' || str.front() == '-') && str.size() < 2) {
+		return false;	
+	}
+
 	for (size_t i = 1; i < str.size(); ++i) {
 		if (!std::isdigit(str[i])) {
 			is_number = false;
@@ -33,68 +37,6 @@ bool ReadNumber(Number& result) {
 
 	result = ConvertToNumber(word);
 	return true;
-}
-
-bool ProcessLastOperations(std::vector<Number>& values,
-		           std::vector<std::string>& operations) {
-	for (size_t i = 0, j = 1; i < operations.size(); ++i) {
-		if (operations[i] == "+") {
-			values[j - 1] += values[j];
-			values.erase(values.begin() + j);
-		} else if (operations[i] == "-") {
-			values[j - 1] -= values[j];	
-			values.erase(values.begin() + j);
-		} else if (operations[i] == "=") {
-			std::cout << values.front() << std::endl;	
-		}
-	}
-	return false;
-}
-
-bool ProcessPrePreLastOperations(std::vector<Number>& values,
-		                 std::vector<std::string>& operations) {
-	bool is_fail = false;
-	for (size_t i = 0, j = 1; i < operations.size() && !is_fail; ++i) {
-		if (operations[i] == "**") {
-			values[j - 1] = std::pow(values[j - 1], values[j]);	
-			++j;
-		} else {
-			++j; // Skip
-		}
-	}
-
-	return is_fail;
-}
-
-bool ProcessPreLastOperations(std::vector<Number>& values,
-		              std::vector<std::string>& operations,
-			      Number& cell,
-			      bool& is_safed) {
-	bool is_fail = false;
-	for (size_t i = 0, j = 1; i < operations.size() && !is_fail; ++i) {
-		if (operations[i] == "l") {
-			is_fail = LoadCell(cell, is_safed, values[j - 1]);
-		} else if (operations[i] == "s") {
-			SaveCell(cell, values[j - 1], is_safed);	
-		} else if (operations[i] == "+") {
-			++j; // Skip
-		} else if (operations[i] == "-") {
-			++j; // Skip
-		} else if (operations[i] == "*") {
-			values[j - 1] *= values[j];	
-			values.erase(values.begin() + j);
-		} else if (operations[i] == "/") {
-			if (values[j] == 0) {
-				std::cerr << "Division by zero" << std::endl;
-				is_fail = true;	
-			} else {
-				values[j - 1] /= values[j];
-				values.erase(values.begin() + j);
-			}
-		}
-	}
-
-	return is_fail;
 }
 
 // True if op1 >= op2
@@ -253,7 +195,6 @@ bool EraseEvaluatedOperation(std::vector<std::string>& operations,
 	return is_fail;
 }
 
-// TODO: rewrite operation processing
 bool ProcessOperations(std::vector<Number>& values,
 		       std::vector<std::string>& operations,
 		       Number& cell,
@@ -262,7 +203,8 @@ bool ProcessOperations(std::vector<Number>& values,
 	int i = 0; // operations
 	int j = (values.size() > 1) ? 1 : 0; // values
 	while (!operations.empty() && !is_failed) {
-		if (NotLowerPriority(operations[i], operations[i + 1])) {
+		if (operations.size() == 1 
+		    || NotLowerPriority(operations[i], operations[i + 1])) {
 			Number& left = values.size() > 1 ? values[j - 1]
 				                         : values[j];
 			is_failed = EvaluateOperation(operations[i], 
@@ -280,10 +222,7 @@ bool ProcessOperations(std::vector<Number>& values,
 			++j;
 		}
 	}
-/*
-	is_failed = EvaluateOperation(operations.front(), values[0], values[1],
-			              cell, values[j - 1], is_safed);
-*/
+
 	return is_failed;
 }
 
@@ -358,13 +297,6 @@ bool RunCalculatorCycle() {
                         || ParseTokens(values, operations)
 			|| ProcessOperations(values, operations,
 					     cell, is_safed);
-
-			/* TO DELETE
-			|| ProcessPrePreLastOperations(values, operations)
-	                || ProcessPreLastOperations(values,operations, 
-					                  cell, is_safed)
-	                || ProcessLastOperations(values, operations);
-			*/
 
 	return is_failed;
 }
