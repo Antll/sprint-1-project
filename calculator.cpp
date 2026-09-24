@@ -16,7 +16,7 @@ bool CheckIsNumber(const std::string& str) {
 	}
 
 	for (size_t i = 1; i < str.size(); ++i) {
-		if (!std::isdigit(str[i])) {
+		if (!std::isdigit(str[i]) && str[i] != '.') {
 			is_number = false;
 			break;
 		}
