@@ -42,7 +42,9 @@ bool ReadNumber(Number& result) {
 // True if op1 >= op2
 bool NotLowerPriority(const std::string& op1,
 		      const std::string& op2) {
-	bool is_op1_ge = false; // greate or equal
+	// Should be false, when priority needed
+	bool is_op1_ge = true; // greate or equal
+	/*
 	if (op1 == "**") {
 		is_op1_ge = true;	
 	} else if (op1 == "*" || op1 == "/") {
@@ -60,6 +62,7 @@ bool NotLowerPriority(const std::string& op1,
 	          || op1 == "l" || op1 == "c") {
 		is_op1_ge = true;	
 	}
+	*/
 
 	return is_op1_ge;
 }
