@@ -258,6 +258,8 @@ bool ParseOperationToken(std::vector<Number>& values,
 	} else if (op == "=") {
 		operations.push_back("=");
 	} else {
+		std::cerr << "Error: Unknown token "
+		          << op << std::endl;
 		is_failed = true;
 	}
 
@@ -275,8 +277,6 @@ bool ParseTokens(std::vector<Number>& values,
 		if (op == "q") {
 			is_exit = true;	
 		} else if (ParseOperationToken(values, operations, op)) {
-			std::cerr << "Error: Unknown token "
-				  << op << std::endl;
 			is_exit = true;
 			is_failed = true;
 		}
