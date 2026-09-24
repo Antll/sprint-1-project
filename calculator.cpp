@@ -47,15 +47,17 @@ bool NotLowerPriority(const std::string& op1,
 		is_op1_ge = true;	
 	} else if (op1 == "*" || op1 == "/") {
 		if (op2 == "+" || op2 == "-" || op2 == "*" || op2 == "/"
-		   || op2 == "l" || op2 == "s" || op2 == "=" || op2 == ":") {
+		   || op2 == "l" || op2 == "s" || op2 == "=" || op2 == ":"
+		   || op2 == "c") {
 			is_op1_ge = true;	
 		} 
 	} else if (op1 == "+" || op1 == "-") {
 		if (op2 == "+" || op2 == "-" || op2 == "=" || op2 == ":"
-		    || op2 == "s" || op2 == "l") {
+		    || op2 == "s" || op2 == "l" || op2 == "c") {
 			is_op1_ge = true;	
 		}	
-	} else if (op1 == "=" || op1 == ":" || op1 == "s" || op1 == "l") {
+	} else if (op1 == "=" || op1 == ":" || op1 == "s" 
+	          || op1 == "l" || op1 == "c") {
 		is_op1_ge = true;	
 	}
 
@@ -71,7 +73,7 @@ bool CheckIfCummulativeOperation(const std::string& op) {
 }
 
 bool CheckIfAccumulatorOperation(const std::string& op) {
-	return ((op == "=") || (op == ":")) ? true : false;
+	return ((op == "=") || (op == ":") || (op == "c")) ? true : false;
 }
 
 bool CheckIfCellOperatoin(const std::string& op) {
@@ -109,10 +111,12 @@ bool EvaluateCummulativeOperation(const std::string& op,
 }
 
 bool EvaluateAccumulatorOperation(const std::string& op,
-	  	                  Number left) {
+	  	                  Number& left) {
 	bool is_fail = false;
 	if (op == "=") {
 		std::cout << left << std::endl;	
+	} else if (op == "c") {
+		left = 0;	
 	} else {
 		is_fail = true;	
 	}
@@ -156,7 +160,7 @@ bool EvaluateOperation(const std::string& op, Number& left, Number& right,
 		is_fail = EvaluateCummulativeOperation(op, left, right);	
 	} else if (op == ":") {
 		is_fail = EvaluateAccumulatorOperation(op, left, right);	
-	} else if (op == "=") {
+	} else if (op == "=" || op == "c") {
 		is_fail = EvaluateAccumulatorOperation(op, left);	
 	} else if (op == "s" || op == "l") {
 		is_fail = EvaluateCellOperatoin(op, cell, left, 
@@ -235,6 +239,8 @@ bool ParseOperationToken(std::vector<Number>& values,
 		operations.push_back("l");
 	} else if (op == "s") {
 		operations.push_back("s");
+	} else if (op == "c") {
+		operations.push_back("c");
 	} else if (op == "+") {
 		operations.push_back("+");
 		is_failed = !ReadNumber(operand);
